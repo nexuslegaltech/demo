@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus LegalTech – Asistente Corporativo Inteligente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0b1527;
+    --navy-mid: #112040;
+    --navy-light: #1a3060;
+    --gold: #c9a84c;
+    --gold-light: #e2c070;
+    --gold-pale: #f0d89040;
+    --white: #f8f6f1;
+    --white-dim: rgba(248,246,241,0.7);
+    --white-faint: rgba(248,246,241,0.12);
+    --border: rgba(201,168,76,0.25);
+    --border-light: rgba(201,168,76,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(11,21,39,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: .75rem;
+  }
+  .nav-logo .logo-mark {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-weight: 600; color: var(--gold);
+    letter-spacing: .05em;
+  }
+  .nav-logo .brand { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; letter-spacing: .08em; color: var(--white); }
+  .nav-logo .brand span { color: var(--gold); }
+  nav ul { display: flex; gap: 2.5rem; list-style: none; }
+  nav ul a { color: var(--white-dim); font-size: .85rem; text-decoration: none; letter-spacing: .06em; text-transform: uppercase; transition: color .2s; }
+  nav ul a:hover { color: var(--gold); }
+  .nav-cta {
+    padding: .5rem 1.4rem;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+    text-decoration: none; border-radius: 2px;
+    transition: background .25s, color .25s;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--navy); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(17,32,64,0.8) 0%, transparent 60%),
+      linear-gradient(160deg, #0b1527 0%, #112040 50%, #0b1527 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black, transparent);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    border: 1px solid var(--border);
+    background: var(--white-faint);
+    padding: .4rem 1.2rem;
+    border-radius: 999px;
+    font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-light);
+    margin-bottom: 2rem;
+    animation: fadeDown .8s ease both;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 300; line-height: 1.1;
+    letter-spacing: -.01em;
+    color: var(--white);
+    animation: fadeDown .8s .15s ease both;
+  }
+  h1 em { font-style: italic; color: var(--gold-light); }
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.1rem; font-weight: 300; color: var(--white-dim);
+    max-width: 560px; margin-inline: auto;
+    animation: fadeDown .8s .3s ease both;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; justify-content: center; margin-top: 3rem;
+    flex-wrap: wrap;
+    animation: fadeDown .8s .45s ease both;
+  }
+  .btn-primary {
+    padding: .9rem 2.4rem;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); font-weight: 500; font-size: .9rem;
+    letter-spacing: .08em; text-transform: uppercase;
+    border: none; border-radius: 3px; cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(201,168,76,0.3); }
+  .btn-ghost {
+    padding: .9rem 2.4rem;
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(248,246,241,0.3);
+    font-size: .9rem; letter-spacing: .08em; text-transform: uppercase;
+    border-radius: 3px; cursor: pointer; transition: border-color .2s;
+    text-decoration: none; display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .hero-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .4rem; animation: fadeDown .8s .6s ease both; }
+  .hero-scroll span { font-size: .7rem; letter-spacing: .12em; color: var(--white-dim); text-transform: uppercase; }
+  .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gold), transparent); animation: scrollPulse 2s infinite; }
+  @keyframes scrollPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── SECTIONS ── */
+  section { padding: 7rem 2rem; position: relative; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem;
+    display: flex; align-items: center; gap: .6rem;
+  }
+  .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.15;
+    color: var(--white); margin-bottom: 1rem;
+  }
+  h2 em { font-style: italic; color: var(--gold-light); }
+  .lead { font-size: 1rem; color: var(--white-dim); max-width: 520px; margin-bottom: 3rem; }
+
+  /* DIVIDER */
+  .divider { width: 100%; height: 1px; background: var(--border-light); margin: 0; }
+
+  /* ── HOW IT WORKS ── */
+  #how { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%); }
+  .steps {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    margin-top: 4rem; position: relative;
+  }
+  .steps::before {
+    content: ''; position: absolute;
+    top: 36px; left: 12.5%; right: 12.5%;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--border), var(--gold), var(--border), transparent);
+  }
+  .step {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 0 1.5rem; position: relative;
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .step.visible { opacity: 1; transform: translateY(0); }
+  .step:nth-child(2) { transition-delay: .12s; }
+  .step:nth-child(3) { transition-delay: .24s; }
+  .step:nth-child(4) { transition-delay: .36s; }
+  .step-num {
+    width: 72px; height: 72px; border-radius: 50%;
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    background: var(--navy-mid);
+    margin-bottom: 1.5rem; position: relative; z-index: 1;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300; color: var(--gold);
+  }
+  .step-icon { font-size: 1.4rem; }
+  .step h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: .6rem; color: var(--white); }
+  .step p { font-size: .85rem; color: var(--white-dim); line-height: 1.6; }
+
+  /* ── DEMO ── */
+  #demo { background: var(--navy); }
+  .demo-wrap {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    margin-top: 3rem;
+  }
+  .demo-text {}
+  .demo-text p { color: var(--white-dim); margin-bottom: 1rem; }
+  .demo-feature {
+    display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.2rem;
+  }
+  .demo-feature .icon {
+    width: 36px; height: 36px; min-width: 36px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    background: var(--white-faint);
+  }
+  .demo-feature p { font-size: .88rem; color: var(--white-dim); margin: 0; }
+  .demo-feature strong { color: var(--white); display: block; margin-bottom: .2rem; }
+
+  /* Phone mockup */
+  .phone-wrap {
+    display: flex; justify-content: center; align-items: center;
+    position: relative;
+  }
+  .phone-glow {
+    position: absolute;
+    width: 320px; height: 520px;
+    background: radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.15), transparent 70%);
+    filter: blur(40px);
+  }
+  .phone {
+    width: 290px; height: 580px;
+    background: #111827;
+    border-radius: 40px;
+    border: 2px solid rgba(255,255,255,0.12);
+    box-shadow:
+      0 0 0 1px rgba(201,168,76,0.1),
+      0 32px 80px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+    position: relative; overflow: hidden;
+    z-index: 1;
+  }
+  .phone-notch {
+    width: 100px; height: 22px;
+    background: #111827;
+    border-radius: 0 0 16px 16px;
+    margin: 0 auto; position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    gap: .4rem;
+  }
+  .phone-notch .cam { width: 8px; height: 8px; border-radius: 50%; background: #222; }
+  .phone-screen {
+    height: calc(100% - 22px);
+    display: flex; flex-direction: column;
+    background: #0e1621; /* Telegram dark bg */
+  }
+  .tg-header {
+    background: #17212b;
+    padding: .7rem 1rem;
+    display: flex; align-items: center; gap: .6rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .tg-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-light), var(--gold));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
+  .tg-info .name { font-size: .78rem; font-weight: 500; color: #e8f0fc; }
+  .tg-info .status { font-size: .68rem; color: #4fae4e; }
+  .tg-messages {
+    flex: 1; padding: .8rem; overflow: hidden;
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  .msg {
+    max-width: 82%; font-size: .72rem; line-height: 1.5;
+    padding: .5rem .8rem; border-radius: 12px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+  .msg.visible { opacity: 1; transform: translateY(0); }
+  .msg-user {
+    background: #2b5278;
+    color: #e8f0fc;
+    align-self: flex-end;
+    border-radius: 12px 12px 2px 12px;
+  }
+  .msg-bot {
+    background: #182533;
+    color: #c6d2dd;
+    align-self: flex-start;
+    border-radius: 12px 12px 12px 2px;
+  }
+  .msg-bot .cite {
+    display: inline-block; margin-top: .4rem;
+    font-size: .62rem; color: var(--gold);
+    border-left: 2px solid var(--gold);
+    padding-left: .4rem; line-height: 1.4;
+  }
+  .msg-time { font-size: .6rem; color: rgba(198,210,221,0.4); text-align: right; margin-top: .2rem; }
+  .tg-input {
+    background: #17212b; padding: .6rem .8rem;
+    display: flex; align-items: center; gap: .5rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .tg-input-box {
+    flex: 1; background: #232e3c; border-radius: 20px;
+    padding: .4rem .8rem; font-size: .68rem; color: rgba(198,210,221,0.5);
+  }
+  .tg-send {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, #2ca5e0, #1a8fc5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; cursor: pointer;
+  }
+  .typing-indicator {
+    display: flex; gap: 3px; align-items: center; padding: .4rem .6rem;
+    background: #182533; border-radius: 12px 12px 12px 2px;
+    align-self: flex-start; width: fit-content;
+    opacity: 0; transition: opacity .3s;
+  }
+  .typing-indicator.show { opacity: 1; }
+  .typing-indicator span {
+    width: 5px; height: 5px; border-radius: 50%; background: #4d6b85;
+    animation: typingDot 1.4s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: .2s; }
+  .typing-indicator span:nth-child(3) { animation-delay: .4s; }
+  @keyframes typingDot { 0%,80%,100%{opacity:.3;transform:translateY(0)} 40%{opacity:1;transform:translateY(-3px)} }
+
+  /* ── WHAT YOU CAN QUERY ── */
+  #capabilities { background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy) 100%); }
+  .cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem;
+  }
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border-light);
+    border-radius: 12px; padding: 2rem 1.8rem;
+    transition: border-color .3s, transform .3s, background .3s;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .5s ease, transform .5s ease, border-color .3s, background .3s;
+  }
+  .card.visible { opacity: 1; transform: translateY(0); }
+  .card:hover { border-color: var(--border); background: rgba(201,168,76,0.04); transform: translateY(-4px) !important; }
+  .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: .6rem; color: var(--white); }
+  .card p { font-size: .85rem; color: var(--white-dim); line-height: 1.6; }
+  .card-tag {
+    display: inline-block; margin-top: .8rem;
+    font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--border); padding: .2rem .6rem; border-radius: 999px;
+  }
+
+  /* ── SECURITY ── */
+  #security { background: var(--navy); }
+  .security-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem;
+  }
+  .sec-item {
+    display: flex; gap: 1.2rem; align-items: flex-start; padding: 1.5rem;
+    border: 1px solid var(--border-light); border-radius: 10px;
+    background: rgba(255,255,255,0.02);
+    opacity: 0; transform: translateX(-16px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .sec-item.visible { opacity: 1; transform: translateX(0); }
+  .sec-item:nth-child(2) { transition-delay: .1s; }
+  .sec-item:nth-child(3) { transition-delay: .2s; }
+  .sec-item:nth-child(4) { transition-delay: .3s; }
+  .sec-icon { font-size: 1.5rem; width: 44px; height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; background: var(--white-faint); border-radius: 8px; }
+  .sec-item h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--white); margin-bottom: .3rem; }
+  .sec-item p { font-size: .83rem; color: var(--white-dim); }
+
+  /* ── TUTORIAL ── */
+  #tutorial { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%); }
+  .tutorial-steps {
+    display: flex; flex-direction: column; gap: 0; margin-top: 3rem;
+    max-width: 640px;
+  }
+  .tut-step {
+    display: flex; gap: 1.5rem; align-items: flex-start; position: relative;
+    padding-bottom: 2rem;
+    opacity: 0; transform: translateX(-16px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .tut-step.visible { opacity: 1; transform: translateX(0); }
+  .tut-step:not(:last-child)::before {
+    content: ''; position: absolute;
+    left: 15px; top: 32px; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .tut-num {
+    width: 32px; height: 32px; min-width: 32px; border-radius: 50%;
+    background: var(--gold); color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 500; font-size: .8rem; z-index: 1;
+  }
+  .tut-content h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--white); margin-bottom: .3rem; }
+  .tut-content p { font-size: .85rem; color: var(--white-dim); }
+  .code-pill {
+    display: inline-block; background: rgba(201,168,76,0.1); border: 1px solid var(--border);
+    border-radius: 4px; padding: .15rem .5rem;
+    font-family: monospace; font-size: .82rem; color: var(--gold);
+  }
+
+  /* ── CTA ── */
+  #cta {
+    background: linear-gradient(135deg, var(--navy-mid) 0%, var(--navy) 100%);
+    text-align: center; padding: 8rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .cta-glow {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,168,76,0.08), transparent);
+  }
+  #cta h2 { max-width: 600px; margin: 0 auto 1rem; }
+  #cta p { color: var(--white-dim); margin-bottom: 3rem; }
+  .cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border-light);
+    padding: 2.5rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--navy);
+  }
+  footer .brand { font-family: 'Cormorant Garamond', serif; font-size: 1rem; letter-spacing: .08em; color: var(--white-dim); }
+  footer .brand span { color: var(--gold); }
+  footer p { font-size: .78rem; color: rgba(248,246,241,0.35); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+    .steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .steps::before { display: none; }
+    .demo-wrap { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: 1fr 1fr; }
+    .security-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+  @media (max-width: 600px) {
+    .cards { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .phone { width: 250px; height: 500px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-mark">NL</div>
+    <div class="brand">Nexus <span>Legal</span>Tech</div>
+  </div>
+  <ul>
+    <li><a href="#how">Cómo funciona</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#capabilities">Capacidades</a></li>
+    <li><a href="#security">Seguridad</a></li>
+    <li><a href="#tutorial">Tutorial</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Solicitar Acceso</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Asistente Corporativo Inteligente · IA para Auditorías</div>
+    <h1>Tu empresa auditada,<br><em>en la palma de tu mano</em></h1>
+    <p class="hero-sub">Consulta tus libros corporativos y resultados de auditoría directamente desde Telegram. Respuestas precisas, instantáneas y respaldadas por documentos auditados.</p>
+    <div class="hero-actions">
+      <a href="#demo" class="btn-primary">Ver Demo en vivo</a>
+      <a href="#how" class="btn-ghost">¿Cómo funciona?</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Explorar</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+    <div class="section-label">Proceso</div>
+    <h2>De la auditoría a tu<br><em>conversación Telegram</em></h2>
+    <p class="lead">En cuatro pasos, toda la inteligencia corporativa de tu empresa queda al alcance de una pregunta.</p>
+
+    <div class="steps" id="steps-container">
+      <div class="step">
+        <div class="step-num"><div class="step-icon">📋</div></div>
+        <h3>Análisis Corporativo</h3>
+        <p>El despacho realiza el análisis jurídico-corporativo, evaluaciones de cumplimiento y genera los entregables digitales.</p>
+      </div>
+      <div class="step">
+        <div class="step-num"><div class="step-icon">🔬</div></div>
+        <h3>Auditoría e Indexación</h3>
+        <p>Los documentos son auditados, validados e indexados con inteligencia artificial en un entorno privado y seguro.</p>
+      </div>
+      <div class="step">
+        <div class="step-num"><div class="step-icon">⚡</div></div>
+        <h3>Asistente Disponible</h3>
+        <p>La información procesada queda disponible en tu asistente de Telegram, siempre actualizada y lista para consultar.</p>
+      </div>
+      <div class="step">
+        <div class="step-num"><div class="step-icon">💬</div></div>
+        <h3>Consulta en Tiempo Real</h3>
+        <p>El cliente accede desde su cuenta autorizada y formula preguntas en lenguaje natural. Recibe respuestas con fuente exacta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DEMO -->
+<section id="demo">
+  <div class="container">
+    <div class="demo-wrap">
+      <div class="demo-text">
+        <div class="section-label">Demo interactiva</div>
+        <h2>Así se ve tu<br><em>asistente en acción</em></h2>
+        <p>Pregunta como si le hablaras a un colega experto. El sistema responde con los datos exactos de tus entregables, incluyendo la referencia al documento fuente.</p>
+
+        <div class="demo-feature">
+          <div class="icon">🧠</div>
+          <div>
+            <strong>Lenguaje natural</strong>
+            <p>Sin comandos complejos. Pregunta como lo harías con un asesor humano.</p>
+          </div>
+        </div>
+        <div class="demo-feature">
+          <div class="icon">📌</div>
+          <div>
+            <strong>Respuestas con fuente</strong>
+            <p>Cada respuesta incluye la referencia exacta al entregable y número de página.</p>
+          </div>
+        </div>
+        <div class="demo-feature">
+          <div class="icon">🔒</div>
+          <div>
+            <strong>Solo cuentas autorizadas</strong>
+            <p>Acceso restringido por ID de Telegram. Nadie más puede consultar tu información.</p>
+          </div>
+        </div>
+        <div class="demo-feature">
+          <div class="icon">⏱</div>
+          <div>
+            <strong>Disponible 24/7</strong>
+            <p>Tu asistente no duerme. Consulta desde cualquier lugar del mundo, en cualquier momento.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone-glow"></div>
+        <div class="phone">
+          <div class="phone-notch"><div class="cam"></div><div class="cam"></div></div>
+          <div class="phone-screen">
+            <div class="tg-header">
+              <div class="tg-avatar">NL</div>
+              <div class="tg-info">
+                <div class="name">Asistente Corporativo · Nexus LT</div>
+                <div class="status">● en línea</div>
+              </div>
+            </div>
+            <div class="tg-messages" id="tg-messages">
+              <!-- Messages injected by JS -->
+            </div>
+            <div class="tg-input">
+              <div class="tg-input-box">Escribe tu consulta...</div>
+              <div class="tg-send">✈</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CAPABILITIES -->
+<section id="capabilities">
+  <div class="container">
+    <div class="section-label">Capacidades</div>
+    <h2>¿Qué puedes<br><em>consultar?</em></h2>
+    <p class="lead">Todo el universo documental de tu empresa, accesible al instante con una sola pregunta.</p>
+
+    <div class="cards" id="cards-container">
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>Libros Corporativos</h3>
+        <p>Consulta el estado y contenido de tus libros de actas, socios, asambleas y órganos de gobierno corporativo.</p>
+        <span class="card-tag">Gobierno corporativo</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <h3>Resultados de Auditoría</h3>
+        <p>Accede a hallazgos, observaciones, recomendaciones y el estatus de cumplimiento de cada auditoría realizada.</p>
+        <span class="card-tag">Auditoría</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📁</div>
+        <h3>Entregables del Despacho</h3>
+        <p>Recupera cualquier entregable digital indexado: análisis, dictámenes, reportes y documentos corporativos.</p>
+        <span class="card-tag">Documentación</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏛️</div>
+        <h3>Actas, Estatutos y Poderes</h3>
+        <p>Fecha de constitución, número de acta, socios accionistas con sus porcentajes, poderes notariales y estatutos vigentes.</p>
+        <span class="card-tag">Documentos legales</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Estados Financieros</h3>
+        <p>Resúmenes de estados financieros auditados, balances, resultados y notas relevantes con referencia exacta.</p>
+        <span class="card-tag">Financiero</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🗂️</div>
+        <h3>Historial Corporativo</h3>
+        <p>Asambleas ordinarias y extraordinarias, cambios de socios, modificaciones de estatutos y todos los eventos registrales.</p>
+        <span class="card-tag">Historial</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECURITY -->
+<section id="security">
+  <div class="container">
+    <div class="section-label">Seguridad</div>
+    <h2>Un entorno<br><em>exclusivo y blindado</em></h2>
+    <p class="lead">Tu información nunca sale del entorno privado de tu empresa. Diseñado para el rigor del sector legal.</p>
+
+    <div class="security-grid" id="security-grid">
+      <div class="sec-item">
+        <div class="sec-icon">🛡️</div>
+        <div>
+          <h4>Servidor Privado Dedicado</h4>
+          <p>Toda la infraestructura opera en un servidor exclusivo para tu empresa. Ningún tercero comparte recursos ni datos.</p>
+        </div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-icon">🔐</div>
+        <div>
+          <h4>Autenticación por ID Telegram</h4>
+          <p>Solo las cuentas expresamente autorizadas por la dirección pueden interactuar con el asistente. Acceso nominativo.</p>
+        </div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-icon">🚫</div>
+        <div>
+          <h4>Aislamiento Total de Datos</h4>
+          <p>Tu información nunca cruza bases de datos de terceros, no se comparte ni se usa para entrenar sistemas externos.</p>
+        </div>
+      </div>
+      <div class="sec-item">
+        <div class="sec-icon">⚖️</div>
+        <div>
+          <h4>La IA Nunca Improvisa</h4>
+          <p>El asistente responde únicamente con base en documentos auditados y validados. Sin alucinaciones. Sin supuestos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TUTORIAL -->
+<section id="tutorial">
+  <div class="container">
+    <div class="section-label">Tutorial</div>
+    <h2>Cómo usar<br><em>tu asistente</em></h2>
+    <p class="lead">Empieza a consultar en minutos. Sin instalaciones, sin curva de aprendizaje.</p>
+
+    <div class="tutorial-steps" id="tut-steps">
+      <div class="tut-step">
+        <div class="tut-num">1</div>
+        <div class="tut-content">
+          <h4>Encuentra el bot en Telegram</h4>
+          <p>Busca <span class="code-pill">@NexusLTBot</span> en Telegram o accede al enlace directo que te enviará el despacho.</p>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-num">2</div>
+        <div class="tut-content">
+          <h4>Envía /start</h4>
+          <p>El asistente recibirá tu solicitud de acceso y verificará automáticamente que tu ID de Telegram esté autorizado.</p>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-num">3</div>
+        <div class="tut-content">
+          <h4>El sistema verifica tu cuenta</h4>
+          <p>Si tu cuenta está en la lista de acceso autorizado, el asistente te dará la bienvenida. En caso contrario, te indicará el proceso de solicitud.</p>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-num">4</div>
+        <div class="tut-content">
+          <h4>Formula tu consulta en lenguaje natural</h4>
+          <p>Escribe tu pregunta como lo harías con un asesor. Por ejemplo: <em>"¿Cuál es el capital social registrado de mi empresa?"</em> o <em>"Muéstrame el resumen de la auditoría del Q2."</em></p>
+        </div>
+      </div>
+      <div class="tut-step">
+        <div class="tut-num">5</div>
+        <div class="tut-content">
+          <h4>Recibe la respuesta con fuente exacta</h4>
+          <p>El asistente entrega la respuesta con referencia al documento fuente: entregable, número de página y fecha de análisis.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-glow"></div>
+  <div class="container reveal">
+    <div class="section-label" style="justify-content:center">Próximo paso</div>
+    <h2>¿Listo para digitalizar<br><em>tu expediente corporativo?</em></h2>
+    <p>Tu empresa merece respuestas inmediatas. Configura tu asistente en días, no meses.</p>
+    <div class="cta-actions">
+      <a href="mailto:contacto@nexus-legaltech.com" class="btn-primary">✉ Solicitar Acceso</a>
+
+    </div>
+    <p style="margin-top:2rem;font-size:.8rem;color:rgba(248,246,241,0.3)">Sin compromisos a largo plazo · Implementación en días · Soporte premium incluido</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="brand">Nexus <span>Legal</span>Tech · Asistente Corporativo Inteligente</div>
+  <p>© 2025 Nexus LegalTech. Tecnología gestionada, resultados inmediatos.</p>
+</footer>
+
+<script>
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal, .step, .card, .sec-item, .tut-step').forEach(el => observer.observe(el));
+
+// ── TELEGRAM DEMO ANIMATION ──
+const msgs = [
+  { type: 'user', text: '¿Cuál es el estado actual del acta de asamblea extraordinaria?', delay: 600 },
+  { type: 'typing', delay: 1400 },
+  { type: 'bot', text: 'La última asamblea extraordinaria fue celebrada el <strong>15 de marzo de 2024</strong>. En ella se aprobó la modificación de estatutos sociales y el nombramiento del nuevo Consejo de Administración.', delay: 3200 },
+  { type: 'user', text: 'Muéstrame el resumen de mi auditoría corporativa', delay: 5000 },
+  { type: 'typing', delay: 5800 },
+  { type: 'bot', text: 'Auditoría Corporativa · Ciclo 2023–2024:\n• <strong>Estado de cumplimiento:</strong> 94% ✅\n• <strong>Observaciones activas:</strong> 2 de baja criticidad\n• <strong>Capital social:</strong> $8,500,000 MXN\n• <strong>Accionistas:</strong> 3 socios con participaciones registradas', delay: 7600 },
+];
+
+const container = document.getElementById('tg-messages');
+let typingEl = null;
+
+function createMsg(m) {
+  if (m.type === 'typing') {
+    typingEl = document.createElement('div');
+    typingEl.className = 'typing-indicator';
+    typingEl.innerHTML = '<span></span><span></span><span></span>';
+    container.appendChild(typingEl);
+    setTimeout(() => typingEl && typingEl.classList.add('show'), 50);
+    container.scrollTop = container.scrollHeight;
+    return;
+  }
+  if (typingEl) { typingEl.remove(); typingEl = null; }
+  const el = document.createElement('div');
+  el.className = `msg msg-${m.type}`;
+  let html = m.text.replace(/\n/g, '<br>');
+  if (m.cite) html += `<div class="cite">📎 ${m.cite}</div>`;
+  html += `<div class="msg-time">${new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})}</div>`;
+  el.innerHTML = html;
+  container.appendChild(el);
+  setTimeout(() => el.classList.add('visible'), 50);
+  container.scrollTop = container.scrollHeight;
+}
+
+// Start demo when section comes into view
+const demoSection = document.getElementById('demo');
+let demoStarted = false;
+const demoObserver = new IntersectionObserver((entries) => {
+  if (entries[0].isIntersecting && !demoStarted) {
+    demoStarted = true;
+    msgs.forEach(m => setTimeout(() => createMsg(m), m.delay));
+    // Restart loop
+    const totalDuration = 11000;
+    setInterval(() => {
+      container.innerHTML = '';
+      typingEl = null;
+      msgs.forEach(m => setTimeout(() => createMsg(m), m.delay));
+    }, totalDuration + 3000);
+  }
+}, { threshold: 0.4 });
+demoObserver.observe(demoSection);
+
+// ── STAGGERED CARD ANIMATIONS ──
+const cardObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const cards = e.target.querySelectorAll('.card');
+      cards.forEach((c, i) => {
+        setTimeout(() => c.classList.add('visible'), i * 100);
+      });
+    }
+  });
+}, { threshold: 0.1 });
+const cardsContainer = document.getElementById('cards-container');
+if (cardsContainer) cardObs.observe(cardsContainer);
+
+const tutObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const steps = e.target.querySelectorAll('.tut-step');
+      steps.forEach((s, i) => setTimeout(() => s.classList.add('visible'), i * 150));
+    }
+  });
+}, { threshold: 0.1 });
+const tutSteps = document.getElementById('tut-steps');
+if (tutSteps) tutObs.observe(tutSteps);
+
+const stepsObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.step').forEach((s, i) => {
+        setTimeout(() => s.classList.add('visible'), i * 150);
+      });
+    }
+  });
+}, { threshold: 0.2 });
+const stepsContainer = document.getElementById('steps-container');
+if (stepsContainer) stepsObs.observe(stepsContainer);
+
+const secObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.sec-item').forEach((s, i) => {
+        setTimeout(() => s.classList.add('visible'), i * 100);
+      });
+    }
+  });
+}, { threshold: 0.15 });
+const secGrid = document.getElementById('security-grid');
+if (secGrid) secObs.observe(secGrid);
+</script>
+</body>
+</html>
